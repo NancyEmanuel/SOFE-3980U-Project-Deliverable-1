@@ -1,0 +1,82 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+
+  <groupId>com.ontariotechu.sofe3980U</groupId>
+  <artifactId>ClusterHomework</artifactId>
+  <version>1.0.0</version>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
+  </properties>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+				<version>5.10.1</version>
+			<scope>test</scope>
+		</dependency>
+    
+
+    <dependency>
+      <groupId>be.abeel</groupId>
+      <artifactId>ajt</artifactId>
+      <version>2.9</version>
+    </dependency>
+
+    <dependency>
+      <groupId>net.sf.javaml</groupId>
+      <artifactId>javaml</artifactId>
+      <version>0.1.7</version>
+    </dependency>
+
+    <dependency>
+      <groupId>gov.nist.math</groupId>
+      <artifactId>jama</artifactId>
+      <version>1.0.3</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>math</artifactId>
+      <version>1.2</version>
+    </dependency>
+	</dependencies>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+       
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.0.2</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <addClasspath>true</addClasspath>
+                <mainClass>com.ontariotechu.sofe3980U.App</mainClass>
+              </manifest>
+            </archive>
+          </configuration> 
+        </plugin>
+
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>3.2.0</version>
+          <configuration>
+            <mainClass>com.ontariotechu.sofe3980U.App</mainClass>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  
+</project>
