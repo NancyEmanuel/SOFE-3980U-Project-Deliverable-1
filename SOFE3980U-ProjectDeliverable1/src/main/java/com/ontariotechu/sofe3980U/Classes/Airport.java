@@ -2,6 +2,7 @@ package com.ontariotechu.sofe3980U.Classes;
 
 public class Airport {
 
+    //Initialize variables 
 private String airportname;
 private String airportabbreviation;
 private String airportcountry;
