@@ -1,47 +1,40 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=0.41, maximum-scale=1" />
-		<meta name="description" content="Flight Booking System">
-		<meta name="keywords" content="Flight Booking System">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Flights System</title>
+</head>
 
-  		
-		<title>Flights Booking System</title>
+<body>
+    <h2>Book Flights</h2>
+    <form th:action="@{/Bookdirect}" method="post">
+        
+        <label for="FromAirport">From Airport:</label>
+           <select class="form-control" id="FromAirport" name="FromAirport">
+                <option value="">Select an Airport</option>
+                <option th:each="airport : ${airports}" th:value="${airport.getairportabbreviation()}" th:text="${airport.getairportname()}">
+                </option>
+            </select>
 
-	</head>
-	<body>
+            <label for="DepartureAirport">Departure Airport:</label>
+            <select class="form-control" id="DepartureAirport" name="DepartureAirport">
+                 <option value="">Select an Airport</option>
+                 <option th:each="airport : ${airports}" th:value="${airport.getairportabbreviation()}" th:text="${airport.getairportname()}">
+                 </option>
+             </select>
+      
+        
+      
+        <input type="submit" value="Display Available Flights">
+    </form>
 
-		
-		<div id="nav">
-            <a href="BookingInterface.html" class="nav-item right">Flight Booking System</a> 
-          
-        </div>    
-
-		<nav>
-		<ul>
-				<li><a href="#Book-direct">Book Direct Flight</a></li>
-
-					<li><a href="#Book-multistop">Book Multi-Stop Flight</a></li>
-				<li><a href="#Book-oneway">Book One-Way Flight</a></li>
-					<li><a href="#Book-roundtrip">Book Round-Trip Flight</a></li>
-			</ul>
-		</nav>
-
-		<main>
-			
-				<h2>View Weekly Direct Flights</h2>
-				<form action="/bookdirect" method="get">
-					<label for="fromAirport">From the Airport:</label><br>
-					<input type="text" id="fromAirport" name="fromAirport"><br>
-					<label for="fromAirport">To the Airport:</label><br> 
-					<input type="text" id="toAirport" name="toAirport"><br>
-					
-					<input type="submit" value="View now">
-				</form>
-		
-	
-		</main>
-		
-	</body>
+    <div th:if="${availableFlights}">
+        <h3>Available Flights</h3>
+        <ul>
+            <li th:each="flight : ${availableFlights}" th:text="${flight.toString()}"></li>
+        </ul>
+    </div>
+    
+</body>
 </html>
+
