@@ -1,114 +1,100 @@
 pipeline {
- environment {
-    PROJECT = credentials('project_id') // secret text for the project id. I set it manually in Jenkins credentials
-    APP_NAME = "binarycalculatorwebapp"
-    CLUSTER = credentials("cluster_name") // secret text for the cluster name. I set it manually in Jenkins credentials
-    CLUSTER_ZONE = credentials("cluster_zone") // secret text for the cluster zone. I set it manually in Jenkins credentials
-    REPO_PATH= credentials("repo_path") // secret text for the repo path. I set it manually in Jenkins credentials
-    IMAGE_TAG = "$REPO_PATH/${APP_NAME}"
-    SERVICE_ACCOUNT= credentials('serive_account')    // secret file for the GCP credential JSON file. I set it manually in Jenkins credentials
+  environment {
+    DOCKER_IMAGE = 'okikioschool/binarycalculator-lab4:latest'
+    DOCKER_CONFIG = "${WORKSPACE}/.docker" // Use a path within the Jenkins workspace
   }
-    agent{   // create a node under the name gcloud that running google/cloud-sdk:latest docker image 
-        kubernetes {
-      label 'sample-app'
-      yaml """
-apiVersion: v1
-kind: Pod
-metadata:
-labels: 
-  component: ci
-spec:
-  containers:
-  # Use service account that can deploy to all namespaces
-  - name: gcloud
-    image:  google/cloud-sdk:latest
-    command:
-    - cat
-    tty: true
-"""
-    }
-}
-    tools{
-        maven 'maven'
-    }
-    stages {
-        stage ('test') {
-            steps {
-                sh 'mvn clean test -f ./BinaryCalculatorWebapp/pom.xml'
-            }
-        }
-        stage('build'){
-            steps{
-                sh 'mvn package -DskipTests -f ./BinaryCalculatorWebapp/ clean package'
-            }
-        }
-        stage('containerize'){
-            steps{
-                container('gcloud') {   // within the gcloud container
-                    dir('BinaryCalculatorWebapp'){
-                        // set the credential for gcloud within the container
-                        sh 'gcloud auth activate-service-account --key-file $SERVICE_ACCOUNT'
-                        sh 'gcloud config set project $PROJECT'
-                        
-                        script {
-                            try {
-                                // docker build + push
-                                sh 'gcloud builds submit -t $IMAGE_TAG --suppress-logs'
-                            }
-                            catch (Exception e) {
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        stage('deployment'){
-            steps{
-                container('gcloud') {
-                    dir('BinaryCalculatorWebapp'){
-                        // set the credential for gcloud and kubectl within the container
-                        sh 'gcloud auth activate-service-account --key-file $SERVICE_ACCOUNT'
-                        sh 'gcloud config set project $PROJECT'
-                        sh 'gcloud container clusters get-credentials $CLUSTER --region=$CLUSTER_ZONE'
-                        script{
-                            try{
-                                // delete it if a previous deployment exists
-                                sh 'kubectl delete deployment binarycalculator-deployment'
-                            }
-                            catch (Exception e){
-                                
-                            }
-                        }
-                        // create a new deployment
-                        sh 'kubectl create deployment binarycalculator-deployment --image $IMAGE_TAG --port=8080'
 
-                    }
-                }
-            }
-        }
-        stage('service'){
-            steps{
-                container('gcloud') {
-                    dir('BinaryCalculatorWebapp'){
-                        // set the credential for gcloud and kubectl within the container
-                        sh 'gcloud auth activate-service-account --key-file $SERVICE_ACCOUNT'
-                        sh 'gcloud config set project $PROJECT'
-                        sh 'gcloud container clusters get-credentials $CLUSTER --region=$CLUSTER_ZONE'
-                        script{
-                            try{
-                                // create if it the service doesn't exist. No need to recreate it
-                                sh 'kubectl expose deployment binarycalculator-deployment --type=LoadBalancer --name=binarycalculator-service'
-                            }
-                            catch (Exception e){
-                                
-                            }
-                        }
-                        // display the service IP
-                        sh "kubectl get service/binarycalculator-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}'"
-
-                    }
-                }
-            }
-        }
+  // agent { kubernetes {} }
+  agent any
+  tools {
+    maven 'maven' 
+  }
+  stages {
+    stage ('Init') {
+      steps {
+        sh 'echo "Start of Job"'
+        sh 'ls -la'
+      }
     }
+    stage ('test') {
+      steps {
+        sh 'mvn clean test -f ./SOFE3980U-ProjectDeliverable1/pom.xml'
+      }
+    }
+    stage ('build') {
+      steps {
+        sh 'mvn package -DskipTests -f ./SOFE3980U-ProjectDeliverable1/pom.xml'
+      }
+    }
+    // stage('Build and push image to Docker Hub') {
+    //   steps {
+    //     script {
+          
+          // withCredentials([usernamePassword(credentialsId: 'docker-registry-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
+          //   // Use workspace directory to avoid read-only file system issue
+          //   sh "mkdir -p ${DOCKER_CONFIG}"
+          //   sh "echo '{\"auths\":{\"https://index.docker.io/v1/\":{\"username\":\"\$DOCKER_USER\",\"password\":\"\$DOCKER_PASSWORD\"}}}' > ${DOCKER_CONFIG}/config.json"
+          // }
+          // // Define the pod template for Kaniko, mounting the workspace directory
+          // podTemplate(containers: [
+          //   containerTemplate(
+          //     name: 'kaniko',
+          //     image: 'gcr.io/kaniko-project/executor:latest',
+          //     command: 'cat',
+          //     ttyEnabled: true,
+          //     volumeMounts: [
+          //       volumeMount(mountPath: '/kaniko/.docker', name: 'docker-config')
+          //     ]
+          //   )],
+          //   volumes: [
+          //     hostPathVolume(hostPath: "${DOCKER_CONFIG}", name: 'docker-config')
+          //   ]
+          // ) {
+          //   container('kaniko') {
+          //     sh """
+          //     /kaniko/executor --context ${WORKSPACE}/BinaryCalculatorWebapp/ \
+          //                       --dockerfile ${WORKSPACE}/BinaryCalculatorWebapp/Dockerfile \
+          //                       --destination ${DOCKER_IMAGE}
+          //     """
+          //   }
+          // }
+
+//           podTemplate(yaml: """
+// apiVersion: v1
+// kind: Pod
+// spec:
+//   containers:
+//   - name: kaniko
+//     image: gcr.io/kaniko-project/executor:latest
+//     command:
+//     - /busybox/cat
+//     tty: true
+//     volumeMounts:
+//     - name: docker-config
+//       mountPath: /kaniko/.docker/
+//   volumes:
+//   - name: docker-config
+//     secret:
+//       secretName: kaniko-secret
+// """, name: 'kaniko') {
+          //   container(name: 'kaniko', shell: '/busybox/sh') {
+          //     sh """
+          //     /kaniko/executor --context ${WORKSPACE}/BinaryCalculatorWebapp/ \
+          //                       --dockerfile ${WORKSPACE}/BinaryCalculatorWebapp/Dockerfile \
+          //                       --destination ${DOCKER_IMAGE}
+          //     """
+          //   }
+          // }
+          // sh "docker login -u $DOCKER_CREDS_USR -p $DOCKER_CREDS_PSW"
+          // sh "docker build -t ${DOCKER_IMAGE} ./BinaryCalculatorWebapp/"
+          // sh "docker push ${DOCKER_IMAGE}"
+    //     }
+    //   }
+    // }
+    stage ('Deploy') {
+      steps {
+        sh 'echo "bye bye"'
+      }
+    }
+  }
 }
