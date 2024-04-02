@@ -84,29 +84,36 @@ h2 {
            <select class="form-control" id="FromAirport" name="FromAirport">
             
                 <option value="">Select an Airport</option>
-                <option th:each="airport : ${airports}" th:value="${airport.getairportabbreviation()}" th:text="${airport.getairportname()}">
+                <option th:each="airport : ${airports}" th:value="${airport.getAirportAbbreviation()}" th:text="${airport.getAirportName()}">
                 </option>
             </select>
 
             <label for="DepartureAirport">Departure Airport:</label>
             <select class="form-control" id="DepartureAirport" name="DepartureAirport">
                  <option value="">Select an Airport</option>
-                 <option th:each="airport : ${airports}" th:value="${airport.getairportabbreviation()}" th:text="${airport.getairportname()}">
+                 <option th:each="airport : ${airports}" th:value="${airport.getAirportAbbreviation()}" th:text="${airport.getAirportName()}">
                  </option>
              </select>
             </div>
 
             <div class="flightrow">
 
-        <label for="DepartureTime">Departure Time:</label>
-        <input type="date" class="form-control" id="DepartureTime" name="DepartureTime"><br>
+        <label for="DepartureDate">Departure Time:</label>
+        <input type="date" class="form-control" id="DepartureDate" name="DepartureDate"><br>
         <br>
 
-        <label for="ArriveTime">Arrival Time:</label>
-        <input type="date" class="form-control" id="ArriveTime" name="ArriveTime"><br>
+        <label for="ArriveDate">Arrival Time:</label>
+        <input type="date" class="form-control" id="ArriveDate" name="ArriveDate"><br>
         <br>
     </div>
 
+    <div>
+        <label for="timeFormat">Time Format:</label>
+        <select class="form-control" id="timeFormat" name="timeFormat">
+            <option value="24">24-hour</option>
+            <option value="12">12-hour</option>
+        </select>
+    </div>
     
         <input type="submit" value="Display Available Flights">
     </form>
