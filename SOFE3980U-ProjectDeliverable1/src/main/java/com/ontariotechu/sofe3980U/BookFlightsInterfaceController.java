@@ -192,18 +192,24 @@ public class BookFlightsInterfaceController {
             return "error TIME1127";
         }
     }
+    
+
     private String formatDepartureTime(Date departureTime, String timeFormat) {
         SimpleDateFormat inFormat = new SimpleDateFormat("HH:mm");
         SimpleDateFormat outFormat;
-
+    
         if ("12".equals(timeFormat)) {
             outFormat = new SimpleDateFormat("hh:mm a");
         } else {
             outFormat = new SimpleDateFormat("HH:mm");
         }
-
+    
+        // Parse the input departureTime to ensure correct formatting
+       String formattedTime = inFormat.format(departureTime);
+    
+        // Format the time based on the user's preference
         return outFormat.format(departureTime);
     }
+    
 
 }
-
