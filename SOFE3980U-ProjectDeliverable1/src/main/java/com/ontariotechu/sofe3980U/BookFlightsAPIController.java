@@ -19,14 +19,17 @@ public class BookFlightsAPIController {
 	public String showBookDirectForm() {
 		return "BookingInterface";
 	}
-	
-@PostMapping("/Bookdirect-api")
-	public String Bookdirectapi(@RequestParam(name="FromAirport", required=true, defaultValue="") String FromAirport,
-					   @RequestParam(name="DestinationAirport", required=true, defaultValue="") String DestinationAirport){
-			String Flight = FromAirport + DestinationAirport  ;
+
+	@PostMapping("/Bookdirect-api")
+	public String Bookdirectapi(
+			@RequestParam(name = "FromAirport", required = true, defaultValue = "") String FromAirport,
+			@RequestParam(name = "DestinationAirport", required = true, defaultValue = "") String DestinationAirport) {
+		String Flight = FromAirport + DestinationAirport;
 		return "Direct flight booked " + Flight;
-		
-		  // test ex: http://localhost:8080/Bookdirect?FromAirport=LAX&DestinationAirport=TorontoPearson&FullName=JaneDoe: LAXTorontoPearsonJaneDoe
-		 
-}
+
+		// test ex:
+		// http://localhost:8080/Bookdirect?FromAirport=LAX&DestinationAirport=TorontoPearson&FullName=JaneDoe:
+		// LAXTorontoPearsonJaneDoe
+
+	}
 }

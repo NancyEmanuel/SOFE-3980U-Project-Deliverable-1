@@ -8,6 +8,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import com.ontariotechu.sofe3980U.BookFlightsAPIController;
+
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
 import org.junit.runner.RunWith;
@@ -24,28 +27,22 @@ import static org.hamcrest.Matchers.containsString;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
-
 @RunWith(SpringRunner.class)
 @WebMvcTest(BookFlightsAPIController.class)
 public class BookFlightsAPIControllerTest {
-
     @Autowired
     private MockMvc mvc;
 
-   
-   
     @Test
     public void Bookdirectapi() throws Exception {
-        this.mvc.perform(post("/Bookdirect-api").param("FromAirport","LAX").param("DestinationAirport","TorontoPearson"))//.andDo(print())
-       //this.mvc.perform(get("/Bookdirect").param("FromAirport","LAX").param("DestinationAirport","TorontoPearson"))
-      
+        this.mvc.perform(
+            post("/Bookdirect-api").param("FromAirport", "LAX").param("DestinationAirport", "TorontoPearson")
+        )
             .andExpect(status().isOk())
             .andExpect(content().string("Direct flight booked LAXTorontoPearson"));
-    //.andExpect(content().string("LAXTorontoPearson"));
+        // .andDo(print())
+        // this.mvc.perform(get("/Bookdirect").param("FromAirport","LAX").param("DestinationAirport","TorontoPearson"))
+        // .andExpect(content().string("LAXTorontoPearson"));
     }
 
-
-
-
-    
 }
