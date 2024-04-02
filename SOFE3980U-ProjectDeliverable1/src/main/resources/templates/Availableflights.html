@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Available Flights</title>
     <a th:href="@{/}" class="btn-home">Back to Home</a>
+
+    <form th:action="@{/bookFlight}" method="post">
 </head>
 <body>
     <h2>Available Flights</h2>
@@ -17,16 +19,21 @@
                 <th>Destination Airport</th>
                 <th>Departure Time</th>
                 <th>Arrive Time</th>
+                <th>Select</th>
                
             </tr>
         </thead>
         <tbody>
          
-            <tr th:each="flight : ${availableFlights}">
-                <td th:text="${flight.getFromAirport().getairportname()}"></td>
-                <td th:text="${flight.getDestinationAirport().getairportname()}"></td>
-                <td th:text="${flight.getDepartureTime()}"></td>
-                <td th:text="${flight.getArriveTime()}"></td>
+            <tr th:each="flight, iterStat : ${availableFlights}">
+                <td th:text="${flight.getFromAirport().getAirportName()}"></td>
+                <td th:text="${flight.getDestinationAirport().getAirportName()}"></td>
+                <td th:text="${flight.getDepartureDate()}"></td>
+                <td th:text="${flight.getArriveDate()}"></td>
+
+                <td>
+                    <input type="radio" name="selectedFlight" th:value="${iterStat.index}" />
+                </td>
               
             </tr>
 
@@ -36,5 +43,6 @@
         </tbody>
     </table>
     <input type="submit" value="Book Now">
+</form>
 </body>
 </html>
