@@ -1,63 +1,30 @@
 package com.ontariotechu.sofe3980U.Classes;
 
 public class Airport {
+    private String airportName;
+    private String airportAbbreviation;
+    private String airportCountry;
+    private String airportAddress;
+    private String airportTimezone;
 
-    //Initialize variables 
-private String airportname;
-private String airportabbreviation;
-private String airportcountry;
-private String airportaddress;
-private String airporttimezone;
+    public Airport(String airportName, String airportAbbreviation, String airportCountry,
+                   String airportAddress, String airportTimezone) {
+        this.airportName = airportName;
+        this.airportAbbreviation = airportAbbreviation;
+        this.airportCountry = airportCountry;
+        this.airportAddress = airportAddress;
+        this.airportTimezone = airportTimezone;
+    }
 
-public Airport(String airportname, String airportabbreviation, String airportcountry, String airportaddress, String airporttimezone  ) {
-    this.airportname = airportname;
-    this.airportabbreviation = airportabbreviation;
-    this.airportcountry = airportcountry;
-    this.airportaddress = airportaddress;
-    this.airporttimezone = airporttimezone;
+    public String getAirportName() { return airportName; }
+    public void setAirportName(String airportName) { this.airportName = airportName; }
+    public String getAirportAbbreviation() { return airportAbbreviation; }
+    public void setAirportAbbreviation(String airportAbbreviation) { this.airportAbbreviation = airportAbbreviation; }
+    public String getAirportCountry() { return airportCountry; }
+    public void setAirportCountry(String airportCountry) { this.airportCountry = airportCountry; }
+    public String getAirportAddress() { return airportAddress; }
+    public void setAirportAddress(String airportAddress) { this.airportAddress = airportAddress; }
+    public String getAirportTimezone() { return airportTimezone; }
+    public void setAirportTimezone(String airportTimezone) { this.airportTimezone = airportTimezone; }
 }
 
-// get and set the listed variables 
-
-public void setairportname(String airportname) {
-    this.airportname = airportname;
-}
-
-public String getairportname() {
-    return airportname;
-}
-
-public void setairportabbreviation(String airportabbreviation) {
-    this.airportabbreviation = airportabbreviation;
-}
-
-public String getairportabbreviation() {
-    return airportabbreviation;
-}
-
-public void setairportcountry(String airportcountry) {
-    this.airportcountry = airportcountry;
-}
-
-public String getairportcountry() {
-    return airportcountry;
-}
-
-public void setairportaddress(String airportaddress) {
-    this.airportaddress = airportaddress;
-}
-
-public String getairportaddress() {
-    return airportaddress;
-}
-
-public void setairporttimezone(String airporttimezone) {
-    this.airporttimezone = airporttimezone;
-}
-
-public String getairporttimezone() {
-    return airporttimezone;
-}
-
-
-}
