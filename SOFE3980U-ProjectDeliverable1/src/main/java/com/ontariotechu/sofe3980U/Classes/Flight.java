@@ -1,21 +1,24 @@
 package com.ontariotechu.sofe3980U.Classes;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 public class Flight {
 
 private Airport FromAirport;
 private Airport DestinationAirport;
-private LocalDate DepartureTime;
-private LocalDate ArriveTime;
+private LocalDate DepartureDate;
+private LocalDate ArriveDate;
+private Date departureTime;
 
 
 
-public Flight(Airport FromAirport, Airport DestinationAirport, LocalDate DepartureTime, LocalDate ArriveTime ) {
+public Flight(Airport FromAirport, Airport DestinationAirport, LocalDate DepartureDate, LocalDate ArriveDate, Date departureTime) {
     this.FromAirport = FromAirport;
     this.DestinationAirport = DestinationAirport;
-    this.DepartureTime = DepartureTime;
-    this.ArriveTime = ArriveTime;
+    this.DepartureDate = DepartureDate;
+    this.ArriveDate = ArriveDate;
+    this.departureTime = departureTime;
 }
 
 // get and set the listed variables 
@@ -36,20 +39,28 @@ public Airport getDestinationAirport() {
 public void setDestinationAirport(Airport DestinationAirport) {
     this.DestinationAirport = DestinationAirport;
 }
-public LocalDate getDepartureTime() {
-    return DepartureTime;
+public LocalDate getDepartureDate() {
+    return DepartureDate;
 }
 
-public void setDepartureTime(LocalDate DepartureTime) {
-    this.DepartureTime = DepartureTime;
+public void setDepartureDate(LocalDate DepartureDate) {
+    this.DepartureDate = DepartureDate;
 }
 
-public LocalDate getArriveTime() {
-    return ArriveTime;
+public LocalDate getArriveDate() {
+    return ArriveDate;
 }
 
-public void setArriveTime(LocalDate ArriveTime) {
-    this.ArriveTime = ArriveTime;
+public void setArriveDate(LocalDate ArriveDate) {
+    this.ArriveDate = ArriveDate;
+}
+
+public Date getDepartureTime() {
+    return departureTime;
+}
+
+public void setDepartureTime(Date departureTime) {
+    this.departureTime = departureTime;
 }
 
 }
