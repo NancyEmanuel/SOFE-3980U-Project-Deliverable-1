@@ -67,6 +67,12 @@ public class BookFlightsInterfaceController {
         return "AvailableFlights";
     }
 
+    @GetMapping("/bookFlight")
+    public String showBookFlightForm() {
+        // Your logic to display the available flights view
+        return "Availableflights"; // Assuming "Availableflights" is the name of your view
+    }
+
     @PostMapping("/bookFlight")
     public String bookFlight(@RequestParam(value = "selectedFlight", required = false) Integer selectedFlightIndex,
                              @RequestParam(value = "timeFormat", required = false) String timeFormat,
