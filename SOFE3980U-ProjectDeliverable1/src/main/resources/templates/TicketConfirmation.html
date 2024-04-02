@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket Confirmation</title>
+</head>
+<body>
+<h1>Ticket Confirmation</h1>
+<div>
+    <h2>Flight Details</h2>
+    <p>From: <span th:text="${selectedFlight.FromAirport.airportName}">From Airport</span></p>
+    <p>To: <span th:text="${selectedFlight.DestinationAirport.airportName}">Destination Airport</span></p>
+    <p>Departure Time: <span th:text="${selectedFlight.departureTime}">Departure Time</span></p>
+    <!-- Add other flight details here -->
+</div>
+<!-- No ticket object was seen in your controller, so I have commented it out. If you have a ticket object, uncomment and adjust accordingly -->
+<!-- <div th:if="${ticket != null}">
+    <h2>Ticket Information</h2>
+    <p th:text="${ticket}">Ticket Info</p>
+</div> -->
+<a th:href="@{/}">Go Back</a>
+</body>
+</html>
