@@ -44,7 +44,6 @@ public class BookFlightsAPIControllerTest {
         // this.mvc.perform(get("/Bookdirect").param("FromAirport","LAX").param("DestinationAirport","TorontoPearson"))
         // .andExpect(content().string("LAXTorontoPearson"));
     }
-
     
     @Test
     public void Bookindirectapi() throws Exception {
