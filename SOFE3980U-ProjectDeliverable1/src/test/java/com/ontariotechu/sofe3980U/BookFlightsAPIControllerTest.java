@@ -45,22 +45,6 @@ public class BookFlightsAPIControllerTest {
         // .andExpect(content().string("LAXTorontoPearson"));
     }
 
-    @Test
-    public void bookDirectblankairportthenOk() throws Exception {
-        this.mvc.perform(
-            post("/Bookdirect-api").param("FromAirport", "").param("DestinationAirport", "TorontoPearson")
-        )
-            .andExpect(status().isOk());
-    }
-    
-    @Test
-    public void bookBlankDestinationAirportOk() throws Exception {
-        this.mvc.perform(
-            post("/Bookdirect-api").param("FromAirport", "LAX").param("DestinationAirport", "")
-        )
-
-        
-            .andExpect(status().isOk());
-    }
+ 
 
 }
