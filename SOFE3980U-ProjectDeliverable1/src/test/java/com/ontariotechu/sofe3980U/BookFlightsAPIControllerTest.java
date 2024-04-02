@@ -45,4 +45,16 @@ public class BookFlightsAPIControllerTest {
         // .andExpect(content().string("LAXTorontoPearson"));
     }
 
+    
+    @Test
+    public void Bookindirectapi() throws Exception {
+        this.mvc.perform(
+            post("/Bookindirect-api").param("FromAirport", "LAX").param("DestinationAirport", "TorontoPearson")
+        )
+            .andExpect(status().isOk())
+            .andExpect(content().string("In-Direct flight not booked, In-Direct flight aren't unavailable"));
+        // .andDo(print())
+        // this.mvc.perform(get("/Bookdirect").param("FromAirport","LAX").param("DestinationAirport","TorontoPearson"))
+        // .andExpect(content().string("LAXTorontoPearson"));
+    }
 }

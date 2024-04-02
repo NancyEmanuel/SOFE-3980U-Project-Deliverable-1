@@ -32,4 +32,16 @@ public class BookFlightsAPIController {
 		// LAXTorontoPearsonJaneDoe
 
 	}
+
+	@PostMapping("/Bookindirect-api")
+	public String Bookindirectapi(
+			@RequestParam(name = "FromAirport", required = true, defaultValue = "") String FromAirport,
+			@RequestParam(name = "DestinationAirport", required = true, defaultValue = "") String DestinationAirport) {
+		return "In-Direct flight not booked, In-Direct flight aren't unavailable";
+
+		// test ex:
+		// http://localhost:8080/Bookindirect?FromAirport=LAX&DestinationAirport=TorontoPearson&FullName=JaneDoe:
+		// LAXTorontoPearsonJaneDoe
+
+	}
 }
