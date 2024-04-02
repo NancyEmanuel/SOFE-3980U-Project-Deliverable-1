@@ -174,20 +174,20 @@ public class BookFlightsInterfaceController {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-        // Add more dummy flights as needed
+        // to do add more test flight data 
         return flights;
     }
     
       public String convertTimeFormat(String time, String format) {
         try {
             if (format.equals("12")) {
-                // Convert 24-hour format to 12-hour format
+                // change the 24 format to 12 hour format 
                 SimpleDateFormat inFormat = new SimpleDateFormat("HH:mm");
                 SimpleDateFormat outFormat = new SimpleDateFormat("hh:mm a");
                 Date date = inFormat.parse(time);
                 return outFormat.format(date);
             } else {
-                // Convert 12-hour format to 24-hour format
+                // Change the 24 hour format to 12 
                 SimpleDateFormat inFormat = new SimpleDateFormat("hh:mm a");
                 SimpleDateFormat outFormat = new SimpleDateFormat("HH:mm");
                 Date date = inFormat.parse(time);
@@ -210,10 +210,10 @@ public class BookFlightsInterfaceController {
             outFormat = new SimpleDateFormat("HH:mm");
         }
     
-        // Parse the input departureTime to ensure correct formatting
+        
        String formattedTime = inFormat.format(departureTime);
     
-        // Format the time based on the user's preference
+        // to format time on user selection 
         return outFormat.format(departureTime);
     }
     
