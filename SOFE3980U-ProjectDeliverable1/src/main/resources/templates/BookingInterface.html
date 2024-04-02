@@ -1,16 +1,88 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    
     <meta charset="UTF-8">
     <title>Book Flights System</title>
-</head>
+    <style>
 
-<body>
-    <h2>Book Flights</h2>
-    <form th:action="@{/Bookdirect}" method="post">
+h2 {
+            color: red;
+        }
+
+    .header {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            background-color: red;
+            border-radius: 7px;
+            margin-bottom: 20px;
+        }
+
+
+            .container {
+            background-color: white;
+            border: 3px solid black;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 30px;
+            padding: 20px;
+        }
+
+         
+        .homebutton {
+            color: white;
+        }
+
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            color: black;
+           
+        }
         
+        .flightrow {
+            display: flex;
+            align-items: center;
+            margin-bottom: 34px;
+        }
+
+        
+        .flightrow label {
+            width: 40%;
+        }
+        
+        input[type="date"],
+        select {
+            width: 60%;
+            padding: 8px;
+          
+        }
+
+        input[type="submit"] {
+            background-color: red;
+            color: white;
+            padding: 10px ;
+            border-radius: 5px;
+            margin: auto; 
+           
+        }
+
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Book Flights</h1>
+            <a class="homebutton" href="#">Home</a>
+        </div>
+
+    
+    <form th:action="@{/Bookdirect}" method="post">
+        <div class="flightrow">
         <label for="FromAirport">From Airport:</label>
+
            <select class="form-control" id="FromAirport" name="FromAirport">
+            
                 <option value="">Select an Airport</option>
                 <option th:each="airport : ${airports}" th:value="${airport.getairportabbreviation()}" th:text="${airport.getairportname()}">
                 </option>
@@ -22,20 +94,29 @@
                  <option th:each="airport : ${airports}" th:value="${airport.getairportabbreviation()}" th:text="${airport.getairportname()}">
                  </option>
              </select>
-      
+            </div>
+
+            <div class="flightrow">
+
         <label for="DepartureTime">Departure Time:</label>
-        <input type="date" class="form-control" id="DepartureTime" name="DepartureTime"><br><br>
+        <input type="date" class="form-control" id="DepartureTime" name="DepartureTime"><br>
+        <br>
 
         <label for="ArriveTime">Arrival Time:</label>
-        <input type="date" class="form-control" id="ArriveTime" name="ArriveTime"><br><br>
-        
+        <input type="date" class="form-control" id="ArriveTime" name="ArriveTime"><br>
+        <br>
+    </div>
+
+    
         <input type="submit" value="Display Available Flights">
     </form>
 
     <div th:if="${availableFlights}">
         <h3>Available Flights</h3>
         <ul>
-            <li th:each="flight : ${availableFlights}" th:text="${flight.toString()}"></li>
+            <li th:each="flight : ${availableFlights}" th:text="${flight.toString()}">
+                
+            </li>
         </ul>
     </div>
     
