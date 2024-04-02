@@ -4,9 +4,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.util.Date;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Calendar;
 import java.util.List;
 
@@ -36,12 +39,13 @@ public class BookFlightsInterfaceController {
     @PostMapping("/Bookdirect")
     public String findAvailableFlights(@RequestParam("FromAirport") String FromAirportAbbrev,
                                       @RequestParam("DepartureAirport") String DepartureAirportAbbrev,
-                                      @RequestParam("DepartureTime") String DepartureTimestr,
-                                      @RequestParam("ArriveTime") String ArriveTimestr,
+                                      @RequestParam("DepartureDate") String DepartureDatestr,
+                                      @RequestParam("ArriveDate") String ArriveDatestr,
+                                      @RequestParam("timeFormat") String timeFormat,
                                       Model model) {
 
-                                        LocalDate DepartureTime = LocalDate.parse(DepartureTimestr);
-    LocalDate ArriveTime = LocalDate.parse(ArriveTimestr);
+                                        LocalDate DepartureDate = LocalDate.parse(DepartureDatestr);
+    LocalDate ArriveDate = LocalDate.parse(ArriveDatestr);
 
         //get the available flights 
         List<Flight> FlightList = getFlightlist();
@@ -52,14 +56,55 @@ public class BookFlightsInterfaceController {
         List<Flight> availableFlights = new ArrayList<>();
         for (Flight flight : FlightList) {
           
-            if (flight.getFromAirport().getairportabbreviation().equals(FromAirportAbbrev) && flight.getDestinationAirport().getairportabbreviation().equals(DepartureAirportAbbrev) && flight.getDepartureTime().isEqual(DepartureTime)  && 
-            flight.getArriveTime().isEqual(ArriveTime)) {
+            if (flight.getFromAirport().getAirportAbbreviation().equals(FromAirportAbbrev) && flight.getDestinationAirport().getAirportAbbreviation().equals(DepartureAirportAbbrev) && flight.getDepartureDate().isEqual(DepartureDate)  && 
+            flight.getArriveDate().isEqual(ArriveDate)) {
                 availableFlights.add(flight);
             }
         }
 
         model.addAttribute("availableFlights", availableFlights);
+        model.addAttribute("timeFormat", timeFormat);
         return "AvailableFlights";
+    }
+
+    @PostMapping("/bookFlight")
+    public String bookFlight(@RequestParam(value = "selectedFlight", required = false) Integer selectedFlightIndex,
+                             @RequestParam(value = "timeFormat", required = false) String timeFormat,
+                             Model model) {
+        List<Flight> allFlights = getFlightlist();
+        if (selectedFlightIndex != null && selectedFlightIndex >= 0 && selectedFlightIndex < allFlights.size()) {
+            Flight selectedFlight = allFlights.get(selectedFlightIndex);
+            String formattedTime = formatDepartureTime(selectedFlight.getDepartureTime(), timeFormat);
+            model.addAttribute("selectedFlight", selectedFlight);
+            model.addAttribute("formattedTime", formattedTime); // Add the formatted time to the model
+            return "TicketConfirmation";
+        } else {
+            model.addAttribute("error", "Flight selection is invalid or not present.");
+            return "AvailableFlights";
+        }
+    }
+
+    @PostMapping("/Bookroundtrip")
+    public String bookRoundTrip(@RequestParam("FromAirport") String FromAirportAbbrev,
+                                @RequestParam("ToAirport") String ToAirportAbbrev,
+                                @RequestParam("ReturnAirport") String returnAirportAbbrev,
+                                Model model) {
+        List<Flight> flightList = getFlightlist();
+        List<Flight> outboundFlights = new ArrayList<>();
+        List<Flight> returnFlights = new ArrayList<>();
+        for (Flight flight : flightList) {
+            if (flight.getFromAirport().getAirportAbbreviation().equals(FromAirportAbbrev) &&
+                    flight.getDestinationAirport().getAirportAbbreviation().equals(ToAirportAbbrev)) {
+                outboundFlights.add(flight);
+            }
+            if (flight.getFromAirport().getAirportAbbreviation().equals(returnAirportAbbrev) &&
+                    flight.getDestinationAirport().getAirportAbbreviation().equals(FromAirportAbbrev)) {
+                returnFlights.add(flight);
+            }
+        }
+        model.addAttribute("outboundFlights", outboundFlights);
+        model.addAttribute("returnFlights", returnFlights);
+        return "RoundTripFlights";
     }
 
     // Returns a list of the airports
@@ -78,43 +123,87 @@ public class BookFlightsInterfaceController {
 
     private List<Flight> getFlightlist() {
         List<Flight> flights = new ArrayList<>();
-      
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
 
-      LocalDate departureTimeflight1 = LocalDate.of(2024, 4, 1); 
-      LocalDate arriveTimeflight1 = LocalDate.of(2024, 4, 2);
+        try {
+            Date departureTime1 = dateFormat.parse("10:00");
+            Date departureTime2 = dateFormat.parse("15:00");
+            Date departureTime3 = dateFormat.parse("21:00");
+
+      LocalDate departureDateflight1 = LocalDate.of(2024, 4, 1); 
+      LocalDate arriveDateflight1 = LocalDate.of(2024, 4, 2);
 
         flights.add(new Flight(
             new Airport("Toronto Pearson", "YYZ", "Canada", "100 Toronto Street", "UTC-12:00"),
             new Airport("LosAngeles International", "LAX", "USA", "500 Hollywood Blv", "UTC-03:00"),
-            departureTimeflight1,
-        arriveTimeflight1
-
+            departureDateflight1,
+        arriveDateflight1,
+        departureTime1
             ));
 
-            LocalDate departureTimeflight2 = LocalDate.of(2024, 4, 3); 
-            LocalDate arriveTimeflight2 = LocalDate.of(2024, 4, 4);
+            LocalDate departureDateflight2 = LocalDate.of(2024, 4, 3); 
+            LocalDate arriveDateflight2 = LocalDate.of(2024, 4, 4);
 
         flights.add(new Flight(
                 new Airport("Toronto Pearson", "YYZ", "Canada", "100 Toronto Street", "UTC-12:00"),
                 new Airport("Heathrow Airport", "LHR", "USA", "1573 Heathrow Street", "UTC-08:00"),
-                departureTimeflight2,
-                arriveTimeflight2
+                departureDateflight2,
+                arriveDateflight2,
+                departureTime2
         
                 ));
 
-                LocalDate departureTimeflight3 = LocalDate.of(2024, 4, 5); 
-    LocalDate arriveTimeflight3 = LocalDate.of(2024, 4, 6); 
+                LocalDate departureDateflight3 = LocalDate.of(2024, 4, 5); 
+    LocalDate arriveDateflight3 = LocalDate.of(2024, 4, 6); 
 
         flights.add(new Flight(
                 new Airport("LosAngeles International", "LAX", "USA", "500 Hollywood Blv", "UTC-03:00"),
                 new Airport("Dubai International Airport", "DXB", "Dubai", "56 Ortin Ave", "UTC-08:00"),
-                departureTimeflight3,
-                arriveTimeflight3
+                departureDateflight3,
+                arriveDateflight3,
+                departureTime2
                 ));
+
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         // Add more dummy flights as needed
         return flights;
     }
     
+      public String convertTimeFormat(String time, String format) {
+        try {
+            if (format.equals("12")) {
+                // Convert 24-hour format to 12-hour format
+                SimpleDateFormat inFormat = new SimpleDateFormat("HH:mm");
+                SimpleDateFormat outFormat = new SimpleDateFormat("hh:mm a");
+                Date date = inFormat.parse(time);
+                return outFormat.format(date);
+            } else {
+                // Convert 12-hour format to 24-hour format
+                SimpleDateFormat inFormat = new SimpleDateFormat("hh:mm a");
+                SimpleDateFormat outFormat = new SimpleDateFormat("HH:mm");
+                Date date = inFormat.parse(time);
+                return outFormat.format(date);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "error TIME1127";
+        }
+    }
+    private String formatDepartureTime(Date departureTime, String timeFormat) {
+        SimpleDateFormat inFormat = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat outFormat;
+
+        if ("12".equals(timeFormat)) {
+            outFormat = new SimpleDateFormat("hh:mm a");
+        } else {
+            outFormat = new SimpleDateFormat("HH:mm");
+        }
+
+        return outFormat.format(departureTime);
+    }
 
 }
 
